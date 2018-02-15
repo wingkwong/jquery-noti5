@@ -34,21 +34,32 @@
 
         o = $.extend({}, $.fn[noti5].defaults, o);
 
-        this.buildCore(o);
+        this.buildCore(element, o);
 
     }
 
     //*******************************************************************************************
 
-    Noti5.prototype.buildCore = function(o) {
-        console.log(core.html);
+    Noti5.prototype.buildCore = function(element, o) {
+        console.log("buildCore invoking...");
         var $container = $(core.html.container).addClass(o.type);
         var $title = $(core.html.title).html(o.title);
         var $message = $(core.html.message).html(o.message);
-        var $progress = $(core.html.progress);
+        var $progress = $(core.html.progress).css({
+           '-webkit-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+            '-moz-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+            '-o-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+            '-ms-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+            'animation': 'progress ' +  o.timeout + 's linear forwards 0.5s'
+        });
         var self = this;
 
-        $('body').append($container.append($title).append($message).append($progress));
+        if(element == null){
+            //TODO:
+        }else{
+            $('body').append($container.append($title).append($message).append($progress));
+        }
+
 
         $('.js-noti5 .close').bind('click', function(e) {
             e.preventDefault();
@@ -62,6 +73,9 @@
     };
 
 
+    Noti5.prototype.registerCss = function($ele) {
+        
+    };
 
     Noti5.prototype.fadeOutNoti5 = function($ele) {
         $ele.fadeOut("slow", function() {
@@ -77,6 +91,7 @@
 
     $[noti5] = function(o) {
         console.log('here');
+        new Noti5(null, o);
     };
 
     $.fn[noti5] = function(o) {
@@ -108,6 +123,7 @@
     $.fn[noti5].defaults = {
         'title': 'default title',
         'message': 'default message',
-        'type': 'success'
+        'type': 'success',
+        'timeout': '4'
     };
 }));
