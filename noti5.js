@@ -42,23 +42,47 @@
 
     Noti5.prototype.buildCore = function(element, o) {
         console.log("buildCore invoking...");
+
+        var self = this;
         var $container = $(core.html.container).addClass(o.type);
         var $title = $(core.html.title).html(o.title);
         var $message = $(core.html.message).html(o.message);
-        var $progress = $(core.html.progress).css({
-           '-webkit-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-            '-moz-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-            '-o-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-            '-ms-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-            'animation': 'progress ' +  o.timeout + 's linear forwards 0.5s'
-        });
-        var self = this;
+        var $progress = $(core.html.progress);
+
+        if($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout){
+            $progress.css({
+               '-webkit-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+                '-moz-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+                '-o-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+                '-ms-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
+                'animation': 'progress ' +  o.timeout + 's linear forwards 0.5s'
+            }); 
+        }
+
 
         if(element == null){
             //TODO:
         }else{
             $('body').append($container.append($title).append($message).append($progress));
         }
+
+        $('.js-noti5').hover(function(){
+            $(this).find('.js-noti5-progress').css({
+                '-webkit-animation-play-state': 'paused',
+                '-moz-animation-play-state': 'paused',
+                '-o-animation-play-state': 'paused',
+                '-ms-animation-play-state': 'paused',
+                'animation-play-state': 'paused'
+            });
+        }, function(){
+            $(this).find('.js-noti5-progress').css({
+                '-webkit-animation-play-state': 'running',
+                '-moz-animation-play-state': 'running',
+                '-o-animation-play-state': 'running',
+                '-ms-animation-play-state': 'running',
+                'animation-play-state': 'running'
+            });
+        });
 
 
         $('.js-noti5 .close').bind('click', function(e) {
