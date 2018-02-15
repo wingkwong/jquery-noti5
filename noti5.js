@@ -17,7 +17,7 @@
 }(function($) {
     var noti5 = 'noti5';
 
-    var  core = {
+    var core = {
         html: {
             container: '<div class="js-noti5"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>',
             title: '<div class="title"/>',
@@ -46,23 +46,36 @@
         var $title = $(core.html.title).html(o.title);
         var $message = $(core.html.message).html(o.message);
         var $progress = $(core.html.progress);
+        var self = this;
 
         $('body').append($container.append($title).append($message).append($progress));
 
+        $('.js-noti5 .close').bind('click', function(e) {
+            e.preventDefault();
+            self.fadeOutNoti5($(this).parent());
+        });
+
 
         $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
-            $(this).parent().fadeOut( "slow", function() {
-                $(this).remove();
-          });
-         });
-        };
+            self.fadeOutNoti5($(this).parent());
+        });
+    };
+
+
+
+    Noti5.prototype.fadeOutNoti5 = function($ele) {
+        $ele.fadeOut("slow", function() {
+            $(this).remove();
+        });
+    };
+
 
 
 
     //*******************************************************************************************
 
 
-    $[noti5] = function(o){
+    $[noti5] = function(o) {
         console.log('here');
     };
 
