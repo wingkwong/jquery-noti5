@@ -17,15 +17,53 @@
 }(function($) {
     var noti5 = 'noti5';
 
+    var  core = {
+        html: {
+            container: '<div class="js-noti5"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>',
+            title: '<div class="title"/>',
+            message: '<div class="message"/>',
+            progress: '<div class="js-noti5-progress"></div>'
+        },
+        'class': '456'
+    };
+
     function Noti5(element, o) {
-        var el = element;
-        var $el = $(element);
+        console.log("..");
+        var el = element,
+            $el = $(element)
 
         o = $.extend({}, $.fn[noti5].defaults, o);
+
+        this.buildCore(o);
+
     }
 
+    //*******************************************************************************************
 
-    $[noti5] = function(){
+    Noti5.prototype.buildCore = function(o) {
+        console.log(core.html);
+        var $container = $(core.html.container).addClass(o.type);
+        var $title = $(core.html.title).html(o.title);
+        var $message = $(core.html.message).html(o.message);
+        var $progress = $(core.html.progress);
+
+        $('body').append($container.append($title).append($message).append($progress));
+
+
+        $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
+            $(this).parent().fadeOut( "slow", function() {
+                $(this).remove();
+          });
+         });
+        };
+
+
+
+    //*******************************************************************************************
+
+
+    $[noti5] = function(o){
+        console.log('here');
     };
 
     $.fn[noti5] = function(o) {
@@ -55,6 +93,8 @@
     };
 
     $.fn[noti5].defaults = {
-
+        'title': 'default title',
+        'message': 'default message',
+        'type': 'success'
     };
 }));
