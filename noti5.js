@@ -50,17 +50,17 @@
         var $progress = $(core.html.progress);
 
         // check if input is number, init progress bar if so
-        if($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout){
+        if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
             $progress.css({
-               '-webkit-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-                '-moz-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-                '-o-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-                '-ms-animation': 'progress ' +  o.timeout + 's linear forwards 0.5s',
-                'animation': 'progress ' +  o.timeout + 's linear forwards 0.5s'
-            }); 
+                '-webkit-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                '-moz-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                '-o-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                '-ms-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                'animation': 'progress ' + o.timeout + 's linear forwards 0.5s'
+            });
 
-             // pause / resume progress bar when it is being hovered / resumed
-            $('.js-noti5').hover(function(){
+            // pause / resume progress bar when it is being hovered / resumed
+            $('.js-noti5').hover(function() {
                 $(this).find('.js-noti5-progress').css({
                     '-webkit-animation-play-state': 'paused',
                     '-moz-animation-play-state': 'paused',
@@ -68,7 +68,7 @@
                     '-ms-animation-play-state': 'paused',
                     'animation-play-state': 'paused'
                 });
-            }, function(){
+            }, function() {
                 $(this).find('.js-noti5-progress').css({
                     '-webkit-animation-play-state': 'running',
                     '-moz-animation-play-state': 'running',
@@ -79,10 +79,12 @@
             });
         }
 
-        if(element == null){
+        var $noti5 = $container.append($title).append($message).append($progress);
+
+        if (element == null) {
             //TODO:
-        }else{
-            $('body').append($container.append($title).append($message).append($progress));
+        } else {
+            $noti5.hide().appendTo('body').fadeIn(1000);
         }
 
         // fade out noti5 container when the close button is clicked
@@ -99,7 +101,7 @@
 
 
     Noti5.prototype.registerCss = function($ele) {
-        
+
     };
 
     Noti5.prototype.fadeOutNoti5 = function($ele) {
@@ -115,7 +117,6 @@
 
 
     $[noti5] = function(o) {
-        console.log('here');
         new Noti5(null, o);
     };
 
@@ -138,9 +139,7 @@
             }
         } else if (typeof o === "object" || !o) {
             return this.each(function() {
-                if (!$.data(this, 'plugin_' + noti5)) {
-                    $.data(this, 'plugin_' + noti5, new Noti5(this, o));
-                }
+                $.data(this, 'plugin_' + noti5, new Noti5(this, o));
             });
         }
     };
