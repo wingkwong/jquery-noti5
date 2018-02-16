@@ -7,6 +7,10 @@
     width: 350px;
 }
 
+.js-noti5-canvas a{
+	text-decoration: none;
+}
+
 .js-noti5-canvas.top-left{
 
 }
