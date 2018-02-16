@@ -84,7 +84,7 @@
         if (element == null) {
             //TODO:
         } else {
-            $noti5.hide().appendTo('body').fadeIn(1000);
+            $noti5.hide().prependTo('body').slideDown();
         }
 
         // fade out noti5 container when the close button is clicked
