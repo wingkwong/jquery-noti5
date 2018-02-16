@@ -44,6 +44,10 @@
 	position: relative;	
 }
 
+.js-noti5.noti5-element{
+	position: absolute;
+}
+
 .js-noti5.success{
   color: #31708f;
   background-color: #d9edf7;

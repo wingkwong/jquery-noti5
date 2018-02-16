@@ -47,11 +47,6 @@
         var $message = $(core.html.message).html(o.message);
         var $progress = $(core.html.progress);
         var canvas = {};
- 
-        // create canvas
-        if(!$('.js-noti5-canvas' + '.' + o.pos).length){
-            $('body').append($(core.html.canvas).addClass(o.pos));
-        }
 
         // check if input is number, init progress bar if so
         if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
@@ -86,17 +81,53 @@
         // build noti5 box
         var $noti5 = $container.append($title).append($message).append($progress);
 
-        if(o.link.href != '#'){
+        if (o.link.href != '#') {
             $noti5 = $('<a/>').attr({
-                'href' : o.link.href,
+                'href': o.link.href,
                 'title': o.link.title,
                 'target': o.link.target
             }).append($noti5);
         }
-        
+
         if (element == null) {
+            // create canvas
+            if (!$('.js-noti5-canvas' + '.' + o.pos).length) {
+                $('body').append($(core.html.canvas).addClass(o.pos));
+            }
+
             $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos).slideDown();
-        } 
+        } else {
+            var $el = $(element);
+
+            $noti5.addClass("noti5-element " + o.pos).hide().prependTo('body');
+
+            switch (o.elementPos) {
+                case 'left':
+                    $noti5.css("top", $el.position().top);
+                    $noti5.css("left", $el.position().left - $noti5.outerWidth());
+                    console.log($noti5);
+                    break;
+
+                case 'right':
+                    $noti5.css("top", $el.position().top);
+                    $noti5.css("left", $el.position().left + $el.outerWidth());
+                    break;
+                case 'top':
+                    console.log($noti5.height());
+                    $noti5.css("top", $el.position().top - $noti5.outerHeight());
+                    $noti5.css("left", $el.position().left);
+                    break;
+                case 'bottom':
+                    $noti5.css("top", $el.position().top + $el.outerHeight());
+                    $noti5.css("left", $el.position().left);
+                    break;
+            }
+
+
+            $noti5.slideDown();
+        }
+
+
 
         // fade out noti5 container when the close button is clicked
         $('.js-noti5 .close').bind('click', function(e) {
@@ -143,7 +174,10 @@
             }
         } else if (typeof o === "object" || !o) {
             return this.each(function() {
-                $.data(this, 'plugin_' + noti5, new Noti5(this, o));
+                if (!$.data(this, 'plugin_' + noti5)) {
+                    $.data(this, 'plugin_' + noti5, new Noti5(this, o));
+                }
+
             });
         }
     };
@@ -154,10 +188,11 @@
         'type': 'success',
         'timeout': '4',
         'pos': 'top-right',
+        'elementPos': 'right',
         'link': {
             'href': '#',
             'title': '',
             'target': '_blank'
-         }
+        }
     };
 }));
