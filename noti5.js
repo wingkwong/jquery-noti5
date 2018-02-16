@@ -19,6 +19,7 @@
 
     var core = {
         html: {
+            canvas: '<div class="js-noti5-canvas"/>',
             container: '<div class="js-noti5"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>',
             title: '<div class="title"/>',
             message: '<div class="message"/>',
@@ -48,6 +49,12 @@
         var $title = $(core.html.title).html(o.title);
         var $message = $(core.html.message).html(o.message);
         var $progress = $(core.html.progress);
+        var canvas = {};
+ 
+        // create canvas
+        if(!$('.js-noti5-canvas' + '.' + o.pos).length){
+            $('body').append($(core.html.canvas).addClass(o.pos));
+        }
 
         // check if input is number, init progress bar if so
         if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
@@ -82,9 +89,9 @@
         var $noti5 = $container.append($title).append($message).append($progress);
 
         if (element == null) {
-            //TODO:
+            $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos).slideDown();
         } else {
-            $noti5.hide().prependTo('body').slideDown();
+           //TODO:
         }
 
         // fade out noti5 container when the close button is clicked
@@ -99,10 +106,6 @@
         });
     };
 
-
-    Noti5.prototype.registerCss = function($ele) {
-
-    };
 
     Noti5.prototype.fadeOutNoti5 = function($ele) {
         $ele.fadeOut("slow", function() {
@@ -148,6 +151,7 @@
         'title': 'default title',
         'message': 'default message',
         'type': 'success',
-        'timeout': '4'
+        'timeout': '300',
+        'pos': 'top-right'
     };
 }));
