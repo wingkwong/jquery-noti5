@@ -1,7 +1,7 @@
 /**
  * 
  *                                                                 
- * noti5.js 
+ * noti5.js - jQuery Notify plugin
  * @author Wing Kam Wong - wingkwong.code@gmail.com
  */
 ;
@@ -24,19 +24,16 @@
             title: '<div class="title"/>',
             message: '<div class="message"/>',
             progress: '<div class="js-noti5-progress"></div>'
-        },
-        'class': '456'
+        }
     };
 
     function Noti5(element, o) {
-        console.log("..");
         var el = element,
             $el = $(element)
 
         o = $.extend({}, $.fn[noti5].defaults, o);
 
         this.buildCore(element, o);
-
     }
 
     //*******************************************************************************************
@@ -86,13 +83,12 @@
             });
         }
 
+        // build noti5 box
         var $noti5 = $container.append($title).append($message).append($progress);
 
         if (element == null) {
             $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos).slideDown();
-        } else {
-           //TODO:
-        }
+        } 
 
         // fade out noti5 container when the close button is clicked
         $('.js-noti5 .close').bind('click', function(e) {
@@ -112,9 +108,6 @@
             $(this).remove();
         });
     };
-
-
-
 
     //*******************************************************************************************
 
@@ -151,7 +144,7 @@
         'title': 'default title',
         'message': 'default message',
         'type': 'success',
-        'timeout': '300',
+        'timeout': '4',
         'pos': 'top-right'
     };
 }));
