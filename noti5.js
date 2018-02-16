@@ -86,6 +86,14 @@
         // build noti5 box
         var $noti5 = $container.append($title).append($message).append($progress);
 
+        if(o.link.href != '#'){
+            $noti5 = $('<a/>').attr({
+                'href' : o.link.href,
+                'title': o.link.title,
+                'target': o.link.target
+            }).append($noti5);
+        }
+        
         if (element == null) {
             $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos).slideDown();
         } 
@@ -141,10 +149,15 @@
     };
 
     $.fn[noti5].defaults = {
-        'title': 'default title',
-        'message': 'default message',
+        'title': 'this is a title',
+        'message': 'message goes here',
         'type': 'success',
         'timeout': '4',
-        'pos': 'top-right'
+        'pos': 'top-right',
+        'link': {
+            'href': '#',
+            'title': '',
+            'target': '_blank'
+         }
     };
 }));
