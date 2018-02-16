@@ -1,3 +1,35 @@
+.js-noti5-canvas{
+	position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1040;
+    box-sizing: border-box;
+    width: 350px;
+}
+
+.js-noti5-canvas.top-left{
+
+}
+
+.js-noti5-canvas.top-center,
+.js-noti5-canvas.bottom-center{
+	left: 50%;
+    margin-left: -175px;
+}
+
+.js-noti5-canvas.top-right,
+.js-noti5-canvas.bottom-right{
+	left: auto;
+    right: 20px;
+}
+
+.js-noti5-canvas.bottom-left,
+.js-noti5-canvas.bottom-center,
+.js-noti5-canvas.bottom-right{
+	top: auto;
+    bottom: 20px;
+}
+
 .js-noti5{
 	width: 300px;
 	height: auto;
