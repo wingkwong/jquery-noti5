@@ -27,23 +27,35 @@
         }
     };
 
+    var methods = {
+        destroy: function() {
+            Noti5.prototype._destroy();
+        }
+    };
+
     function Noti5(element, o) {
         var el = element,
             $el = $(element)
 
+        if (typeof o === 'string') {
+            var message = o;
+            o = $.fn[noti5].defaults;
+            o.message = message;
+        }
+
         o = $.extend({}, $.fn[noti5].defaults, o);
 
-        this.buildCore(element, o);
+        this._buildCore(element, o);
 
         return {
-            destroy: this.destroy
+            destroy: methods.destroy
         };
     }
 
     //*******************************************************************************************
 
-    Noti5.prototype.buildCore = function(element, o) {
-        console.log("buildCore invoking...");
+    Noti5.prototype._buildCore = function(element, o) {
+        console.log("_buildCore invoking...");
 
         var self = this;
         var $container = $(core.html.container).addClass(o.type);
@@ -136,25 +148,24 @@
         // fade out noti5 container when the close button is clicked
         $('.js-noti5 .close').bind('click', function(e) {
             e.preventDefault();
-            self.fadeOutNoti5($(this).parent());
+            self._fadeOutNoti5($(this).parent());
         });
 
         //fade out noti5 container after timeout
         $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
-            self.fadeOutNoti5($(this).parent());
+            self._fadeOutNoti5($(this).parent());
         });
     };
 
-    Noti5.prototype.destroy = function() {
+    Noti5.prototype._destroy = function() {
         $('.js-noti5 .close').click();
     };
 
-    Noti5.prototype.fadeOutNoti5 = function($ele) {
+    Noti5.prototype._fadeOutNoti5 = function($ele) {
         $ele.fadeOut("slow", function() {
             $(this).remove();
         });
     };
-
 
 
     //*******************************************************************************************
@@ -165,22 +176,16 @@
     };
 
     $.fn[noti5] = function(o) {
-        if (typeof arguments[0] === 'string') {
-            var methodName = arguments[0];
+
+        if (methods[arguments[0]]) {
+            return methods[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof arguments[0] === 'string') {
+            var message = arguments[0];
             var args = Array.prototype.slice.call(arguments, 1);
-            var returnVal;
+
             this.each(function() {
-                if ($.data(this, 'plugin_' + noti5) && typeof $.data(this, 'plugin_' + noti5)[methodName] === 'function') {
-                    returnVal = $.data(this, 'plugin_' + noti5)[methodName].apply(this, args);
-                } else {
-                    throw new Error('Method ' + methodName + ' does not exist on jQuery.' + noti5);
-                }
+                return new Noti5(this, o);
             });
-            if (returnVal !== undefined) {
-                return returnVal;
-            } else {
-                return this;
-            }
         } else if (typeof o === "object" || !o) {
             return this.each(function() {
                 if (!$.data(this, 'plugin_' + noti5)) {
