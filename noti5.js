@@ -78,11 +78,12 @@
             if ($.inArray(o.pos, canvas) != -1) {
                 if (!$('.js-noti5-canvas' + '.' + o.pos).length) {
                     $('body').append($(core.html.canvas).addClass(o.pos));
-                    $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
                 }
+                $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
             } else {
                 throw new Error('position ' + o.pos + ' is not supported.');
             }
+
         } else {
             if ($.inArray(o.elementPos, elementPos) != -1) {
                 var $el = $(element);
