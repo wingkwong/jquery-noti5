@@ -33,8 +33,6 @@
     };
 
     function Noti5(element, o) {
-        var el = element,
-            $el = $(element)
 
         if (typeof o === 'string') {
             var message = o;
@@ -42,152 +40,165 @@
             o.message = message;
         }
 
-        o = $.extend({}, $.fn[noti5].defaults, o);
+        this.element = element;
+        this.o = $.extend({}, $.fn[noti5].defaults, o);
 
-        this._buildCore(element, o);
+        this._init();
+        // this._buildCore(element, o);
 
-        return {
-            destroy: core.methods.destroy
-        };
+        // return {
+        //     destroy: core.methods.destroy
+        // };
     }
 
     //*******************************************************************************************
+    $.extend(Noti5.prototype, {
 
-    Noti5.prototype._buildCore = function(element, o) {
-        var self = this;
-        var $container = $(core.html.container).addClass(o.type);
-        var $title = $(core.html.title).html(o.title);
-        var $message = $(core.html.message).html(o.message);
-        var $progress = $(core.html.progress);
-        var canvas = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
-        var elementPos = ['left', 'right', 'top', 'bottom'];
-
-        // build noti5 box
-        var $noti5 = $container.append($title).append($message).append($progress);
-
-        if (o.link.href != '#') {
-            $noti5 = $('<a/>').attr({
-                'href': o.link.href,
-                'title': o.link.title,
-                'target': o.link.target
-            }).append($noti5);
-        }
-
-        if (element == null) {
-            // create canvas
-            if ($.inArray(o.pos, canvas) != -1) {
-                if (!$('.js-noti5-canvas' + '.' + o.pos).length) {
-                    $('body').append($(core.html.canvas).addClass(o.pos));
+        _init: function() {
+            this._buildCore();
+            this.noti5 = {
+                update: function() {
+                    console.log("sss");
                 }
-                $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
-            } else {
-                throw new Error('position ' + o.pos + ' is not supported.');
+            }
+        },
+        _buildCore: function() {
+            var self = this;
+            var o = this.o;
+            var element = this.element;
+            var $container = $(core.html.container).addClass(o.type);
+            var $title = $(core.html.title).html(o.title);
+            var $message = $(core.html.message).html(o.message);
+            var $progress = $(core.html.progress);
+            var canvas = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
+            var elementPos = ['left', 'right', 'top', 'bottom'];
+
+            // build noti5 box
+            var $noti5 = $container.append($title).append($message).append($progress);
+
+            if (o.link.href != '#') {
+                $noti5 = $('<a/>').attr({
+                    'href': o.link.href,
+                    'title': o.link.title,
+                    'target': o.link.target
+                }).append($noti5);
             }
 
-        } else {
-            if ($.inArray(o.elementPos, elementPos) != -1) {
-                var $el = $(element);
-
-                $noti5.addClass("noti5-element " + o.elementPos).hide().prependTo('body');
-
-                switch (o.elementPos) {
-                    case 'left':
-                        $noti5.css("top", $el.position().top);
-                        $noti5.css("left", $el.position().left - $noti5.outerWidth());
-                        break;
-                    case 'right':
-                        $noti5.css("top", $el.position().top);
-                        $noti5.css("left", $el.position().left + $el.outerWidth());
-                        break;
-                    case 'top':
-                        $noti5.css("top", $el.position().top - $noti5.outerHeight());
-                        $noti5.css("left", $el.position().left);
-                        break;
-                    case 'bottom':
-                        $noti5.css("top", $el.position().top + $el.outerHeight());
-                        $noti5.css("left", $el.position().left);
-                        break;
+            if (element == null) {
+                // create canvas
+                if ($.inArray(o.pos, canvas) != -1) {
+                    if (!$('.js-noti5-canvas' + '.' + o.pos).length) {
+                        $('body').append($(core.html.canvas).addClass(o.pos));
+                    }
+                    $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
+                } else {
+                    throw new Error('position ' + o.pos + ' is not supported.');
                 }
+
             } else {
-                throw new Error('position ' + o.elementPos + ' is not supported.');
+                if ($.inArray(o.elementPos, elementPos) != -1) {
+                    var $el = $(element);
+
+                    $noti5.addClass("noti5-element " + o.elementPos).hide().prependTo('body');
+
+                    switch (o.elementPos) {
+                        case 'left':
+                            $noti5.css("top", $el.position().top);
+                            $noti5.css("left", $el.position().left - $noti5.outerWidth());
+                            break;
+                        case 'right':
+                            $noti5.css("top", $el.position().top);
+                            $noti5.css("left", $el.position().left + $el.outerWidth());
+                            break;
+                        case 'top':
+                            $noti5.css("top", $el.position().top - $noti5.outerHeight());
+                            $noti5.css("left", $el.position().left);
+                            break;
+                        case 'bottom':
+                            $noti5.css("top", $el.position().top + $el.outerHeight());
+                            $noti5.css("left", $el.position().left);
+                            break;
+                    }
+                } else {
+                    throw new Error('position ' + o.elementPos + ' is not supported.');
+                }
             }
-        }
 
-        // offset reposition
-        if (typeof o.offset === 'number') {
-            $noti5.css({
-                'left': "+=" + o.offset,
-                'top': "+=" + o.offset
-            });
-        } else if (typeof o.offset.x != 'undefined' && typeof o.offset.y != 'undefined') {
-            $noti5.css({
-                'left': "+=" + o.offset.x,
-                'top': "+=" + o.offset.y
-            });
-        }
-
-        // spacing
-         if (typeof o.spacing === 'number') {
-            $noti5.css('margin-bottom', o.spacing);
-        }
-
-         // check if input is number, init progress bar if so
-        if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
-           if(o.timeout > 0){
-                 $progress.css({
-                    '-webkit-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                    '-moz-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                    '-o-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                    '-ms-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                    'animation': 'progress ' + o.timeout + 's linear forwards 0.5s'
+            // offset reposition
+            if (typeof o.offset === 'number') {
+                $noti5.css({
+                    'left': "+=" + o.offset,
+                    'top': "+=" + o.offset
                 });
+            } else if (typeof o.offset.x != 'undefined' && typeof o.offset.y != 'undefined') {
+                $noti5.css({
+                    'left': "+=" + o.offset.x,
+                    'top': "+=" + o.offset.y
+                });
+            }
 
-                // pause / resume progress bar when it is being hovered / resumed
-                $('.js-noti5').hover(function() {
-                    $(this).find('.js-noti5-progress').css({
-                        '-webkit-animation-play-state': 'paused',
-                        '-moz-animation-play-state': 'paused',
-                        '-o-animation-play-state': 'paused',
-                        '-ms-animation-play-state': 'paused',
-                        'animation-play-state': 'paused'
+            // spacing
+            if (typeof o.spacing === 'number') {
+                $noti5.css('margin-bottom', o.spacing);
+            }
+
+            // check if input is number, init progress bar if so
+            if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
+                if (o.timeout > 0) {
+                    $progress.css({
+                        '-webkit-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                        '-moz-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                        '-o-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                        '-ms-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                        'animation': 'progress ' + o.timeout + 's linear forwards 0.5s'
                     });
-                }, function() {
-                    $(this).find('.js-noti5-progress').css({
-                        '-webkit-animation-play-state': 'running',
-                        '-moz-animation-play-state': 'running',
-                        '-o-animation-play-state': 'running',
-                        '-ms-animation-play-state': 'running',
-                        'animation-play-state': 'running'
+
+                    // pause / resume progress bar when it is being hovered / resumed
+                    $('.js-noti5').hover(function() {
+                        $(this).find('.js-noti5-progress').css({
+                            '-webkit-animation-play-state': 'paused',
+                            '-moz-animation-play-state': 'paused',
+                            '-o-animation-play-state': 'paused',
+                            '-ms-animation-play-state': 'paused',
+                            'animation-play-state': 'paused'
+                        });
+                    }, function() {
+                        $(this).find('.js-noti5-progress').css({
+                            '-webkit-animation-play-state': 'running',
+                            '-moz-animation-play-state': 'running',
+                            '-o-animation-play-state': 'running',
+                            '-ms-animation-play-state': 'running',
+                            'animation-play-state': 'running'
+                        });
                     });
-                });
 
-                //fade out noti5 container after timeout
-                $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
-                    self._fadeOutNoti5($(this).parent());
-                });
-           }
-        }
+                    //fade out noti5 container after timeout
+                    $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
+                        self._fadeOutNoti5($(this).parent());
+                    });
+                }
+            }
 
-        $noti5.slideDown();
+            $noti5.slideDown();
 
 
-        // fade out noti5 container when the close button is clicked
-        $('.js-noti5 .close').bind('click', function(e) {
-            e.preventDefault();
-            self._fadeOutNoti5($(this).parent());
-        });
+            // fade out noti5 container when the close button is clicked
+            $('.js-noti5 .close').bind('click', function(e) {
+                e.preventDefault();
+                self._fadeOutNoti5($(this).parent());
+            });
+        },
 
-    };
+        _destroy: function() {
+            $('.js-noti5 .close').click();
+        },
+        _fadeOutNoti5: function($ele) {
+            $ele.fadeOut("slow", function() {
+                $(this).remove();
+            });
+        },
 
-    Noti5.prototype._destroy = function() {
-        $('.js-noti5 .close').click();
-    };
-
-    Noti5.prototype._fadeOutNoti5 = function($ele) {
-        $ele.fadeOut("slow", function() {
-            $(this).remove();
-        });
-    };
+    });
 
 
 
@@ -195,28 +206,20 @@
 
 
     $[noti5] = function(o) {
-        new Noti5(null, o);
+        o = new Noti5(null, o);
+        return o.noti5;
     };
 
     $.fn[noti5] = function(o) {
+        this.each(function() {
+            if (!$.data(this, 'plugin_' + noti5)) {
+                var o = new Noti5(this, o);
+                $.data(this, 'plugin_' + noti5, o);
+                return o.noti5;
+            }
 
-        if (core.methods[arguments[0]]) {
-            return core.methods[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (typeof arguments[0] === 'string') {
-            var message = arguments[0];
-            var args = Array.prototype.slice.call(arguments, 1);
 
-            this.each(function() {
-                return new Noti5(this, o);
-            });
-        } else if (typeof o === "object" || !o) {
-            return this.each(function() {
-                if (!$.data(this, 'plugin_' + noti5)) {
-                    $.data(this, 'plugin_' + noti5, new Noti5(this, o));
-                }
-
-            });
-        }
+        });
     };
 
     $.fn[noti5].defaults = {
