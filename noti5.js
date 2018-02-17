@@ -95,7 +95,6 @@
                         $noti5.css("top", $el.position().top);
                         $noti5.css("left", $el.position().left - $noti5.outerWidth());
                         break;
-
                     case 'right':
                         $noti5.css("top", $el.position().top);
                         $noti5.css("left", $el.position().left + $el.outerWidth());
@@ -130,37 +129,39 @@
 
                 // check if input is number, init progress bar if so
         if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
-            $progress.css({
-                '-webkit-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                '-moz-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                '-o-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                '-ms-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
-                'animation': 'progress ' + o.timeout + 's linear forwards 0.5s'
-            });
-
-            // pause / resume progress bar when it is being hovered / resumed
-            $('.js-noti5').hover(function() {
-                $(this).find('.js-noti5-progress').css({
-                    '-webkit-animation-play-state': 'paused',
-                    '-moz-animation-play-state': 'paused',
-                    '-o-animation-play-state': 'paused',
-                    '-ms-animation-play-state': 'paused',
-                    'animation-play-state': 'paused'
+           if(o.timeout > 0){
+                 $progress.css({
+                    '-webkit-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                    '-moz-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                    '-o-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                    '-ms-animation': 'progress ' + o.timeout + 's linear forwards 0.5s',
+                    'animation': 'progress ' + o.timeout + 's linear forwards 0.5s'
                 });
-            }, function() {
-                $(this).find('.js-noti5-progress').css({
-                    '-webkit-animation-play-state': 'running',
-                    '-moz-animation-play-state': 'running',
-                    '-o-animation-play-state': 'running',
-                    '-ms-animation-play-state': 'running',
-                    'animation-play-state': 'running'
-                });
-            });
 
-            //fade out noti5 container after timeout
-            $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
-                self._fadeOutNoti5($(this).parent());
-            });
+                // pause / resume progress bar when it is being hovered / resumed
+                $('.js-noti5').hover(function() {
+                    $(this).find('.js-noti5-progress').css({
+                        '-webkit-animation-play-state': 'paused',
+                        '-moz-animation-play-state': 'paused',
+                        '-o-animation-play-state': 'paused',
+                        '-ms-animation-play-state': 'paused',
+                        'animation-play-state': 'paused'
+                    });
+                }, function() {
+                    $(this).find('.js-noti5-progress').css({
+                        '-webkit-animation-play-state': 'running',
+                        '-moz-animation-play-state': 'running',
+                        '-o-animation-play-state': 'running',
+                        '-ms-animation-play-state': 'running',
+                        'animation-play-state': 'running'
+                    });
+                });
+
+                //fade out noti5 container after timeout
+                $('.js-noti5 .js-noti5-progress').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
+                    self._fadeOutNoti5($(this).parent());
+                });
+           }
         }
 
         $noti5.slideDown();
