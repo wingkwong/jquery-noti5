@@ -34,6 +34,10 @@
         o = $.extend({}, $.fn[noti5].defaults, o);
 
         this.buildCore(element, o);
+
+        return {
+            destroy: this.destroy
+        };
     }
 
     //*******************************************************************************************
@@ -141,12 +145,17 @@
         });
     };
 
+    Noti5.prototype.destroy = function() {
+        $('.js-noti5 .close').click();
+    };
 
     Noti5.prototype.fadeOutNoti5 = function($ele) {
         $ele.fadeOut("slow", function() {
             $(this).remove();
         });
     };
+
+
 
     //*******************************************************************************************
 
