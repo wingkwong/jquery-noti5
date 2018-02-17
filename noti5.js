@@ -44,11 +44,6 @@
         this.o = $.extend({}, $.fn[noti5].defaults, o);
 
         this._init();
-        // this._buildCore(element, o);
-
-        // return {
-        //     destroy: core.methods.destroy
-        // };
     }
 
     //*******************************************************************************************
@@ -57,8 +52,12 @@
         _init: function() {
             this._buildCore();
             this.noti5 = {
+                element: this.element,
                 update: function() {
-                    console.log("sss");
+                    
+                },
+                destroy: function() {
+                    $('.js-noti5 .close').click();
                 }
             }
         },
@@ -188,10 +187,6 @@
                 self._fadeOutNoti5($(this).parent());
             });
         },
-
-        _destroy: function() {
-            $('.js-noti5 .close').click();
-        },
         _fadeOutNoti5: function($ele) {
             $ele.fadeOut("slow", function() {
                 $(this).remove();
@@ -211,15 +206,14 @@
     };
 
     $.fn[noti5] = function(o) {
-        this.each(function() {
-            if (!$.data(this, 'plugin_' + noti5)) {
-                var o = new Noti5(this, o);
-                $.data(this, 'plugin_' + noti5, o);
-                return o.noti5;
-            }
 
+        if (!$.data(document, 'plugin_' + noti5)) {
+            var context = new Noti5(this, o);
+            $.data(document, 'plugin_' + noti5, context);
 
-        });
+            return context.noti5;
+        }
+        //TODO:
     };
 
     $.fn[noti5].defaults = {
