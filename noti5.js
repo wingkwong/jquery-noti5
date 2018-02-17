@@ -114,7 +114,6 @@
         }
 
         // offset reposition
-
         if (typeof o.offset === 'number') {
             $noti5.css({
                 'left': "+=" + o.offset,
@@ -127,7 +126,12 @@
             });
         }
 
-                // check if input is number, init progress bar if so
+        // spacing
+         if (typeof o.spacing === 'number') {
+            $noti5.css('margin-bottom', o.spacing);
+        }
+
+         // check if input is number, init progress bar if so
         if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
            if(o.timeout > 0){
                  $progress.css({
@@ -227,6 +231,7 @@
             'title': '',
             'target': '_blank'
         },
-        'offset': 0
+        'offset': 0,
+        'spacing': 5
     };
 }));
