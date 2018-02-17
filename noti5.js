@@ -24,12 +24,11 @@
             title: '<div class="title"/>',
             message: '<div class="message"/>',
             progress: '<div class="js-noti5-progress"></div>'
-        }
-    };
-
-    var methods = {
-        destroy: function() {
-            Noti5.prototype._destroy();
+        },
+        methods: {
+            destroy: function() {
+                Noti5.prototype._destroy();
+            }
         }
     };
 
@@ -48,7 +47,7 @@
         this._buildCore(element, o);
 
         return {
-            destroy: methods.destroy
+            destroy: core.methods.destroy
         };
     }
 
@@ -60,14 +59,7 @@
         var $title = $(core.html.title).html(o.title);
         var $message = $(core.html.message).html(o.message);
         var $progress = $(core.html.progress);
-        var canvas = [
-            'top-left',
-            'top-center',
-            'top-right',
-            'bottom-left',
-            'bottom-center',
-            'bottom-right'
-        ];
+        var canvas = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
         var elementPos = ['left', 'right', 'top', 'bottom'];
 
 
@@ -203,8 +195,8 @@
 
     $.fn[noti5] = function(o) {
 
-        if (methods[arguments[0]]) {
-            return methods[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+        if (core.methods[arguments[0]]) {
+            return core.methods[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof arguments[0] === 'string') {
             var message = arguments[0];
             var args = Array.prototype.slice.call(arguments, 1);
