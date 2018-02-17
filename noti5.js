@@ -60,7 +60,17 @@
         var $title = $(core.html.title).html(o.title);
         var $message = $(core.html.message).html(o.message);
         var $progress = $(core.html.progress);
-        var canvas = {};
+        var canvas = [
+            'top-left',
+            'top-center',
+            'top-right',
+            'bottom-left',
+            'bottom-center',
+            'bottom-right'
+        ];
+        var elementPos = ['left', 'right', 'top', 'bottom'];
+
+
 
         // check if input is number, init progress bar if so
         if ($.isNumeric(o.timeout) && Math.floor(o.timeout) == o.timeout) {
@@ -105,45 +115,52 @@
 
         if (element == null) {
             // create canvas
-            if (!$('.js-noti5-canvas' + '.' + o.pos).length) {
-                $('body').append($(core.html.canvas).addClass(o.pos));
+            if ($.inArray(o.pos, canvas) != -1) {
+                if (!$('.js-noti5-canvas' + '.' + o.pos).length) {
+                    $('body').append($(core.html.canvas).addClass(o.pos));
+                    $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
+                }
+            } else {
+                throw new Error('position ' + o.pos + ' is not supported.');
             }
-
-            $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
         } else {
-            var $el = $(element);
+            if ($.inArray(o.elementPos, elementPos) != -1) {
+                var $el = $(element);
 
-            $noti5.addClass("noti5-element " + o.pos).hide().prependTo('body');
+                $noti5.addClass("noti5-element " + o.elementPos).hide().prependTo('body');
 
-            switch (o.elementPos) {
-                case 'left':
-                    $noti5.css("top", $el.position().top);
-                    $noti5.css("left", $el.position().left - $noti5.outerWidth());
-                    break;
+                switch (o.elementPos) {
+                    case 'left':
+                        $noti5.css("top", $el.position().top);
+                        $noti5.css("left", $el.position().left - $noti5.outerWidth());
+                        break;
 
-                case 'right':
-                    $noti5.css("top", $el.position().top);
-                    $noti5.css("left", $el.position().left + $el.outerWidth());
-                    break;
-                case 'top':
-                    $noti5.css("top", $el.position().top - $noti5.outerHeight());
-                    $noti5.css("left", $el.position().left);
-                    break;
-                case 'bottom':
-                    $noti5.css("top", $el.position().top + $el.outerHeight());
-                    $noti5.css("left", $el.position().left);
-                    break;
+                    case 'right':
+                        $noti5.css("top", $el.position().top);
+                        $noti5.css("left", $el.position().left + $el.outerWidth());
+                        break;
+                    case 'top':
+                        $noti5.css("top", $el.position().top - $noti5.outerHeight());
+                        $noti5.css("left", $el.position().left);
+                        break;
+                    case 'bottom':
+                        $noti5.css("top", $el.position().top + $el.outerHeight());
+                        $noti5.css("left", $el.position().left);
+                        break;
+                }
+            } else {
+                throw new Error('position ' + o.elementPos + ' is not supported.');
             }
         }
 
         // offset reposition
 
-        if(typeof o.offset === 'number'){
+        if (typeof o.offset === 'number') {
             $noti5.css({
                 'left': "+=" + o.offset,
                 'top': "+=" + o.offset
             });
-        }else if (typeof o.offset.x != 'undefined' && typeof o.offset.y != 'undefined'){
+        } else if (typeof o.offset.x != 'undefined' && typeof o.offset.y != 'undefined') {
             $noti5.css({
                 'left': "+=" + o.offset.x,
                 'top': "+=" + o.offset.y
@@ -217,6 +234,6 @@
             'title': '',
             'target': '_blank'
         },
-        'offset': 0 
+        'offset': 0
     };
 }));
