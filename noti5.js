@@ -55,8 +55,6 @@
     //*******************************************************************************************
 
     Noti5.prototype._buildCore = function(element, o) {
-        console.log("_buildCore invoking...");
-
         var self = this;
         var $container = $(core.html.container).addClass(o.type);
         var $title = $(core.html.title).html(o.title);
@@ -111,7 +109,7 @@
                 $('body').append($(core.html.canvas).addClass(o.pos));
             }
 
-            $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos).slideDown();
+            $noti5.hide().prependTo('.js-noti5-canvas' + '.' + o.pos);
         } else {
             var $el = $(element);
 
@@ -121,7 +119,6 @@
                 case 'left':
                     $noti5.css("top", $el.position().top);
                     $noti5.css("left", $el.position().left - $noti5.outerWidth());
-                    console.log($noti5);
                     break;
 
                 case 'right':
@@ -129,7 +126,6 @@
                     $noti5.css("left", $el.position().left + $el.outerWidth());
                     break;
                 case 'top':
-                    console.log($noti5.height());
                     $noti5.css("top", $el.position().top - $noti5.outerHeight());
                     $noti5.css("left", $el.position().left);
                     break;
@@ -138,11 +134,23 @@
                     $noti5.css("left", $el.position().left);
                     break;
             }
-
-
-            $noti5.slideDown();
         }
 
+        // offset reposition
+
+        if(typeof o.offset === 'number'){
+            $noti5.css({
+                'left': "+=" + o.offset,
+                'top': "+=" + o.offset
+            });
+        }else if (typeof o.offset.x != 'undefined' && typeof o.offset.y != 'undefined'){
+            $noti5.css({
+                'left': "+=" + o.offset.x,
+                'top': "+=" + o.offset.y
+            });
+        }
+
+        $noti5.slideDown();
 
 
         // fade out noti5 container when the close button is clicked
@@ -166,6 +174,7 @@
             $(this).remove();
         });
     };
+
 
 
     //*******************************************************************************************
@@ -207,6 +216,7 @@
             'href': '#',
             'title': '',
             'target': '_blank'
-        }
+        },
+        'offset': 0 
     };
 }));
