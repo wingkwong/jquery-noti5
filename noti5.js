@@ -265,9 +265,9 @@
     };
 
     $.fn[noti5].defaults = {
-        'title': 'this is a title',
-        'message': 'message goes here',
-        'type': 'success',
+        'title': '',
+        'message': '',
+        'type': 'info',
         'timeout': 4,
         'pos': 'top-right',
         'elementPos': 'right',
