@@ -74,8 +74,8 @@
 
                     console.log( self.o);
                 },
-                destroy: function() {
-                    $('.js-noti5 .close').click();
+                close: function() {
+                   self._fadeOutNoti5(this.$ele);
                 }
             }
         },
@@ -92,8 +92,6 @@
             var elementPos = ['left', 'right', 'top', 'bottom'];
 
             // build noti5 box
-
-            //TODO: showCloseBtn
             if(o.showCloseBtn){
                 $container = $container.append($closeBtn);
             }
