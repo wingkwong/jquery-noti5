@@ -57,25 +57,52 @@
                 $ele: this.$noti5,
                 update: function(o, val) {
                     console.log("updating");
-                    
+
                     var opt = {};
-                    if(typeof o === 'string'){
+                    if (typeof o === 'string') {
                         opt[o] = val;
-                    }else{
+                    } else {
                         opt = o;
                     }
 
-                    //updating title
-                    this.$ele.find('.title').html(opt.title);
+                    var $e;
+                    if (this.$ele.is("a")) {
+                        $e = this.$ele.find('.js-noti5');
+                    }
 
-                    self.o = opt;
-                    console.log(this.$ele);
-                    console.log( opt);
+                    for (var c in opt) {
+                        switch (c) {
+                            case 'title':
+                                $e.find('.title').html(opt.title);
+                                break;
 
-                    console.log( self.o);
+                            case 'message':
+                                $e.find('.message').html(opt.message);
+                                break;
+
+                            case 'type':
+                                $e.removeClass($e.attr("data-type")).addClass(opt.type).attr("data-type", opt.type);
+                                break;
+
+                            case 'link':
+                                var $e;
+                                if (this.$ele.is("a")) {
+                                    $e = this.$ele;
+                                } else {
+                                    $e = this.$ele.wrap('<a class="clickable"/>').parent();
+                                }
+
+                                $e.attr({
+                                    'href': opt.link.href,
+                                    'title': opt.link.title,
+                                    'target': opt.link.target
+                                });
+                                break;
+                        }
+                    }
                 },
                 close: function() {
-                   self._fadeOutNoti5(this.$ele);
+                    self._fadeOutNoti5(this.$ele);
                 }
             }
         },
@@ -83,7 +110,7 @@
             var self = this;
             var o = this.o;
             var element = this.element;
-            var $container = $(core.html.container).addClass(o.type);
+            var $container = $(core.html.container).addClass(o.type).attr("data-type", o.type);
             var $title = $(core.html.title).html(o.title);
             var $message = $(core.html.message).html(o.message);
             var $closeBtn = $(core.html.closeBtn);
@@ -92,13 +119,13 @@
             var elementPos = ['left', 'right', 'top', 'bottom'];
 
             // build noti5 box
-            if(o.showCloseBtn){
+            if (o.showCloseBtn) {
                 $container = $container.append($closeBtn);
             }
             var $noti5 = $container.append($title).append($message).append($progress);
 
             if (o.link.href != '#') {
-                $noti5 = $('<a/>').attr({
+                $noti5 = $('<a class="clickable"/>').attr({
                     'href': o.link.href,
                     'title': o.link.title,
                     'target': o.link.target
@@ -220,7 +247,6 @@
     });
 
     //*******************************************************************************************
-
 
     $[noti5] = function(o) {
         o = new Noti5(null, o);
