@@ -20,7 +20,8 @@
     var core = {
         html: {
             canvas: '<div class="js-noti5-canvas"/>',
-            container: '<div class="js-noti5"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>',
+            container: '<div class="js-noti5"></div>',
+            closeBtn: '<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>',
             title: '<div class="title"/>',
             message: '<div class="message"/>',
             progress: '<div class="js-noti5-progress"></div>'
@@ -50,11 +51,28 @@
     $.extend(Noti5.prototype, {
 
         _init: function() {
+            var self = this;
             this._buildCore();
             this.noti5 = {
-                element: this.element,
-                update: function() {
+                $ele: this.$noti5,
+                update: function(o, val) {
+                    console.log("updating");
                     
+                    var opt = {};
+                    if(typeof o === 'string'){
+                        opt[o] = val;
+                    }else{
+                        opt = o;
+                    }
+
+                    //updating title
+                    this.$ele.find('.title').html(opt.title);
+
+                    self.o = opt;
+                    console.log(this.$ele);
+                    console.log( opt);
+
+                    console.log( self.o);
                 },
                 destroy: function() {
                     $('.js-noti5 .close').click();
@@ -68,11 +86,17 @@
             var $container = $(core.html.container).addClass(o.type);
             var $title = $(core.html.title).html(o.title);
             var $message = $(core.html.message).html(o.message);
+            var $closeBtn = $(core.html.closeBtn);
             var $progress = $(core.html.progress);
             var canvas = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
             var elementPos = ['left', 'right', 'top', 'bottom'];
 
             // build noti5 box
+
+            //TODO: showCloseBtn
+            if(o.showCloseBtn){
+                $container = $container.append($closeBtn);
+            }
             var $noti5 = $container.append($title).append($message).append($progress);
 
             if (o.link.href != '#') {
@@ -178,6 +202,8 @@
                 }
             }
 
+            this.$noti5 = $noti5;
+
             $noti5.slideDown();
 
 
@@ -194,8 +220,6 @@
         },
 
     });
-
-
 
     //*******************************************************************************************
 
@@ -229,6 +253,7 @@
             'target': '_blank'
         },
         'offset': 0,
-        'spacing': 5
+        'spacing': 5,
+        'showCloseBtn': true
     };
 }));
