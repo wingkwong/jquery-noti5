@@ -1,0 +1,26 @@
+{
+  "name": "jquery-noti5",
+  "version": "1.0.1",
+  "description": "jQuery notication plugin",
+  "main": "noti5.min",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wingkwong/jquery-noti5.git"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "jquery",
+    "noit5",
+    "notication"
+  ],
+  "author": "wingkwong.code@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wingkwong/jquery-noti5/issues"
+  },
+  "homepage": "https://github.com/wingkwong/jquery-noti5#readme"
+}
