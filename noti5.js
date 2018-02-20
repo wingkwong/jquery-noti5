@@ -1,8 +1,7 @@
-/**
- * 
- *                                                                 
- * noti5.js - jQuery Notify plugin
+/**                                                             
+ * noti5.js - jQuery Notification plugin
  * @author Wing Kam Wong - wingkwong.code@gmail.com
+ * @version 1.0.0
  */
 ;
 (function(factory) {
@@ -56,8 +55,6 @@
             this.noti5 = {
                 $ele: this.$noti5,
                 update: function(o, val) {
-                    console.log("updating");
-
                     var opt = {};
                     if (typeof o === 'string') {
                         opt[o] = val;
@@ -261,7 +258,6 @@
 
             return context.noti5;
         }
-        //TODO:
     };
 
     $.fn[noti5].defaults = {
