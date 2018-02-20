@@ -8,7 +8,7 @@ jQuery library
 
 ### Installing
 
-- NPM: TBC
+- NPM: https://www.npmjs.com/package/jquery-noti5
 
 ## Options
 
